@@ -10,14 +10,13 @@ const buttonStyle = {
 class Counter extends Component {
   constructor(props){
     super(props);
-
     this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
     this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
-
     this.state = {
       count: props.initValue
     }
   }
+
 
   componentWillReceiveProps(nextProps){
     console.log('进入 componentWillReceiveProps ' + this.props.caption);
@@ -33,12 +32,22 @@ class Counter extends Component {
 
   onClickIncrementButton(){
     console.log('点击了添加');
-    this.setState({count: this.state.count + 1});
+    this.updateCount(true);
+    //this.setState({count: this.state.count + 1});
   }
 
   onClickDecrementButton(){
     console.log('点击了减少');
-    this.setState({count: this.state.count - 1});
+    this.updateCount(false);
+    //this.setState({count: this.state.count - 1});
+  }
+
+  updateCount(isIncrement){
+    const previousValue = this.state.count;
+    const newValue = isIncrement ? previousValue + 1 : previousValue - 1;
+
+    this.setState({count: newValue});
+    this.props.onUpdate(newValue, previousValue);
   }
 
   shouldComponentUpdate(nextProps, nextState){
