@@ -3,6 +3,8 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import CounterStore from '../stores/CounterStore.js';
+import {increment,decrement} from '../Actions.js';
 const buttonStyle = {
   margin: '10px'
 };
@@ -10,51 +12,41 @@ const buttonStyle = {
 class Counter extends Component {
   constructor(props){
     super(props);
-    this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
-    this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
-    this.state = {
-      count: props.initValue
-    }
+   this.onChange = this.onChange.bind(this);
+   this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
+   this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
+    console.log('shit --->>>' + CounterStore.getCounterValues());
+   this.state = {
+
+     count: CounterStore.getCounterValues()[props.caption]
+   }
   }
 
-
-  componentWillReceiveProps(nextProps){
-    console.log('进入 componentWillReceiveProps ' + this.props.caption);
-  }
-
-  componentWillMount(){
-    console.log('进入 componentWillMount ' + this.props.caption);
-  }
-
-  componentDidMount(){
-    console.log('进入 componentDidMount ' + this.props.caption);
-  }
-
-  onClickIncrementButton(){
-    console.log('点击了添加');
-    this.updateCount(true);
-    //this.setState({count: this.state.count + 1});
-  }
-
-  onClickDecrementButton(){
-    console.log('点击了减少');
-    this.updateCount(false);
-    //this.setState({count: this.state.count - 1});
-  }
-
-  updateCount(isIncrement){
-    const previousValue = this.state.count;
-    const newValue = isIncrement ? previousValue + 1 : previousValue - 1;
-
-    this.setState({count: newValue});
-    this.props.onUpdate(newValue, previousValue);
-  }
-
-  shouldComponentUpdate(nextProps, nextState){
+  shouldComponentUpdate(nextProps, nextState) {
     return (nextProps.caption !== this.props.caption) ||
       (nextState.count !== this.state.count);
   }
 
+  componentDidMount(){
+    CounterStore.addChangeListener(this.onChange);
+  }
+
+  componentWillUnmount(){
+    CounterStore.removeChangeListener(this.onChange);
+  }
+
+  onChange(){
+    const newCount = CounterStore.getCounterValues()[this.props.caption];
+    this.setState({count: newCount});
+  }
+
+  onClickIncrementButton(){
+    increment(this.props.caption);
+  }
+
+  onClickDecrementButton(){
+    decrement(this.props.caption);
+  }
   render() {
     console.log('进入 ' + this.props.caption);
     const {caption} = this.props;
@@ -70,10 +62,7 @@ class Counter extends Component {
 
 Counter.propTypes = {
   caption: PropTypes.string.isRequired,
-  initValue: PropTypes.number
 };
 
-Counter.defaultProps = {
-  initValue:0
-};
+
 export default  Counter;

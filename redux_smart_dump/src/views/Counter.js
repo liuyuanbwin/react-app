@@ -1,5 +1,5 @@
 /**
- * Created by mac1 on 2018/1/26.
+ * Created by mac1 on 2018/2/25.
  */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -8,12 +8,12 @@ import store from '../Store.js';
 import * as Actions from '../Actions.js';
 
 const buttonStyle = {
-  margin: '10px',
+  margin:'10px',
   border:'5px solid yellow'
 };
 
-class Counter extends Component {
-  constructor(props) {
+class Counter extends Component{
+  constructor(props){
     super(props);
 
     this.onIncrement = this.onIncrement.bind(this);
@@ -38,24 +38,23 @@ class Counter extends Component {
     store.dispatch(Actions.decrement(this.props.caption));
   }
 
-  onChange() {
+  onChange(){
     this.setState(this.getOwnState());
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (nextProps.caption !== this.props.caption) ||
-      (nextState.value !== this.state.value);
+  shouldComponentUpdate(nextProps, nextState){
+    return (nextProps.caption !== this.props.caption) || (nextState.value !== this.state.value);
   }
 
   componentDidMount() {
     store.subscribe(this.onChange);
   }
 
-  componentWillUnmount() {
-    store.unsubscribe(this.onChange);
+  componentWillUnmount(){
+    store.unsubscribe(this.onChange)
   }
 
-  render() {
+  render(){
     const value = this.state.value;
     const {caption} = this.props;
 
@@ -63,14 +62,14 @@ class Counter extends Component {
       <div>
         <button style={buttonStyle} onClick={this.onIncrement}>+</button>
         <button style={buttonStyle} onClick={this.onDecrement}>-</button>
-        <span>{caption} count--->>>:{value}</span>
+        <span>{caption} 数量是:{value}</span>
       </div>
     );
   }
 }
 
 Counter.propTypes = {
-  caption: PropTypes.string.isRequired
+  caption:PropTypes.string.isRequired
 };
 
 export default Counter;

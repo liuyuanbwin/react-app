@@ -2,6 +2,9 @@
  * Created by mac1 on 2018/1/24.
  */
 import AppDispatcher from '../AppDispatcher.js';
+import * as ActionTypes from '../ActionTypes.js';
+import {EventEmitter} from 'events';
+const CHANGE_EVENT = 'changed';
 const counterValues = {
   'First':0,
   'Second':10,
@@ -35,3 +38,5 @@ CounterStore.dispatchToken = AppDispatcher.register(
       CounterStore.emitChange();
     }
   });
+
+export default CounterStore;

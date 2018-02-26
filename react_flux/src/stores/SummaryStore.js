@@ -2,7 +2,12 @@
  * Created by mac1 on 2018/1/24.
  */
 import AppDispatcher from '../AppDispatcher.js';
-function computeSummary(conterValues) {
+import * as ActionTypes from '../ActionTypes.js';
+import CounterStore from './CounterStore.js';
+import { EventEmitter } from 'events';
+
+const CHANGE_EVENT = 'changed';
+function computeSummary(counterValues) {
   let summary = 0;
   for (const key in counterValues){
     if(counterValues.hasOwnProperty(key)){
@@ -16,6 +21,15 @@ const SummaryStore = Object.assign({}, EventEmitter.prototype,{
   getSummary:function () {
     return computeSummary(CounterStore.getCounterValues());
   },
+  emitChange:function () {
+    this.emit(CHANGE_EVENT);
+  },
+  addChangeListener:function (callback) {
+    this.on(CHANGE_EVENT,callback);
+  },
+  removeChangeListener:function (callback) {
+    this.removeChangeListener(CHANGE_EVENT,callback);
+  }
 });
 
 SummaryStore.dispatchToken = AppDispatcher.register((action) => {
@@ -24,3 +38,5 @@ SummaryStore.dispatchToken = AppDispatcher.register((action) => {
     SummaryStore.emitChange();
   }
 });
+
+export default SummaryStore;

@@ -1,14 +1,14 @@
 /**
- * Created by mac1 on 2018/1/26.
+ * Created by mac1 on 2018/2/25.
  */
 import React, {Component} from 'react';
 import Counter from './Counter.js';
 import Summary from './Summary.js';
 
 const style = {
-  margin: '20px',
-  border:'1px solid red'
-};
+  margin:'20px',
+  border:'1px solid pink'
+}
 
 class ControlPanel extends Component {
   render(){
